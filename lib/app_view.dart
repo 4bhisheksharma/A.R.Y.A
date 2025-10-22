@@ -10,9 +10,14 @@ class MyAppView extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "A R Y A",
-      theme: ThemeData.light(
-        useMaterial3: true,
-      ).copyWith(scaffoldBackgroundColor: MyAppTheme.whiteColor),
+      theme: ThemeData.light(useMaterial3: true).copyWith(
+        scaffoldBackgroundColor: MyAppTheme.whiteColor,
+        appBarTheme: AppBarTheme(
+          backgroundColor: MyAppTheme.whiteColor,
+          elevation: 0,
+        ),
+      ),
+
       home: HomeScreen(),
     );
   }
