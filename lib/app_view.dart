@@ -1,4 +1,5 @@
 import 'package:arya/screens/home_screen.dart';
+import 'package:arya/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class MyAppView extends StatelessWidget {
@@ -9,12 +10,9 @@ class MyAppView extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "A R Y A",
-      theme: ThemeData(
-        colorScheme: ColorScheme.light(
-          primary: Colors.grey[200]!,
-          secondary: Colors.grey[700]!,
-        ),
-      ),
+      theme: ThemeData.light(
+        useMaterial3: true,
+      ).copyWith(scaffoldBackgroundColor: MyAppTheme.whiteColor),
       home: HomeScreen(),
     );
   }
