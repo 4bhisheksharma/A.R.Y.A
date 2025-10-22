@@ -15,7 +15,20 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("A R Y A"),
-        leading: Icon(Icons.menu_rounded),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu_rounded),
+              onPressed: () {
+                // Open the drawer
+                debugPrint("Menu button pressed");
+                //FIXME: this need to be fixed to open drawer
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
       ),
       body: Column(
         children: [
@@ -58,6 +71,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            margin: EdgeInsets.only(left: 10, top: 20),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Here are some features you can try:",
+              style: TextStyle(
+                color: MyAppTheme.mainFontColor,
+                fontSize: 16,
+                fontFamily: 'Cera Pro',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+
+          // some suggestion boxes texts
         ],
       ),
     );
