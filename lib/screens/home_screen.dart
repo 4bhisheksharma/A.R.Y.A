@@ -1,5 +1,7 @@
 import 'package:arya/theme/app_theme.dart';
+import 'package:arya/widgets/feature_box.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,15 +16,26 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("A R Y A"),
+        title: const Text(
+          "A R Y A",
+          style: TextStyle(color: MyAppTheme.mainFontColor),
+        ),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: const Icon(Icons.menu_rounded),
+              iconSize: 45,
+              icon: SizedBox(
+                width: 35,
+                height: 35,
+                child: Lottie.asset(
+                  'assets/images/Fire.json',
+                  fit: BoxFit.contain,
+                  repeat: true,
+                  animate: true,
+                ),
+              ),
               onPressed: () {
-                // Open the drawer
                 debugPrint("Menu button pressed");
-                //FIXME: this need to be fixed to open drawer
                 Scaffold.of(context).openDrawer();
               },
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -35,15 +48,37 @@ class _HomeScreenState extends State<HomeScreen> {
           Stack(
             children: [
               Center(
-                child: Container(
-                  height: 135,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/arya-final.png"),
-                      fit: BoxFit.contain,
-                    ),
+                child: SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Lottie JSON animation behind the avatar
+                      Positioned.fill(
+                        child: Opacity(
+                          opacity: 0.9,
+                          child: Lottie.asset(
+                            'assets/images/Fire.json',
+                            fit: BoxFit.contain,
+                            repeat: true,
+                            animate: true,
+                          ),
+                        ),
+                      ),
+
+                      // Circular avatar on top (moved down slightly)
+                      Positioned(
+                        top: 88,
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundImage: AssetImage(
+                            'assets/images/arya-final.png',
+                          ),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -84,6 +119,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.w600,
               ),
             ),
+          ),
+
+          //features list
+          Column(
+            children: [
+              MyFeatureBox(
+                color: MyAppTheme.firstSuggestionBoxColor,
+                headerText: 'ChatGPT Integration',
+                descriptionText:
+                    'Integrate ChatGPT into your applications seamlessly.',
+              ),
+            ],
           ),
 
           // some suggestion boxes texts
