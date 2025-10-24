@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       // Circular avatar on top (moved down slightly)
                       Positioned(
-                        top: 88,
+                        top: 86,
                         child: CircleAvatar(
                           radius: 60,
                           backgroundImage: AssetImage(
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            margin: EdgeInsets.symmetric(horizontal: 40).copyWith(top: 20),
+            margin: EdgeInsets.symmetric(horizontal: 40).copyWith(top: 18),
             decoration: BoxDecoration(
               border: Border.all(color: MyAppTheme.borderColor),
               borderRadius: BorderRadius.only(
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            margin: EdgeInsets.only(left: 10, top: 20),
+            margin: EdgeInsets.only(left: 10, top: 18),
             alignment: Alignment.centerLeft,
             child: Text(
               "Here are some features you can try:",
@@ -129,12 +129,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 headerText: 'ChatGPT Integration',
                 descriptionText:
                     'Integrate ChatGPT into your applications seamlessly.',
+                icon: Icons.chat_bubble_outline,
+              ),
+              MyFeatureBox(
+                color: MyAppTheme.secondSuggestionBoxColor,
+                headerText: 'Smart Voice Assistant',
+                descriptionText:
+                    'Interact with ARYA using natural language voice commands.',
+                icon: Icons.mic_outlined,
               ),
             ],
           ),
-
-          // some suggestion boxes texts
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          debugPrint("Floating Action Button Pressed");
+        },
+        backgroundColor: MyAppTheme.mainFontColor,
+        child: const Icon(Icons.keyboard_voice, color: MyAppTheme.whiteColor),
       ),
     );
   }
