@@ -14,11 +14,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Colors.grey[50],
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "A R Y A",
-          style: TextStyle(color: MyAppTheme.mainFontColor),
+          style: TextStyle(
+            color: MyAppTheme.mainFontColor,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 4,
+            fontFamily: 'Cera Pro',
+          ),
         ),
         leading: Builder(
           builder: (BuildContext context) {
@@ -43,111 +52,176 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              Center(
-                child: SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Lottie JSON animation behind the avatar
-                      Positioned.fill(
-                        child: Opacity(
-                          opacity: 0.9,
-                          child: Lottie.asset(
-                            'assets/images/Fire.json',
-                            fit: BoxFit.contain,
-                            repeat: true,
-                            animate: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            // Avatar with fire animation
+            Stack(
+              children: [
+                Center(
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: MyAppTheme.mainFontColor.withOpacity(0.3),
+                          blurRadius: 30,
+                          spreadRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Lottie JSON animation behind the avatar
+                        Positioned.fill(
+                          child: Opacity(
+                            opacity: 0.9,
+                            child: Lottie.asset(
+                              'assets/images/Fire.json',
+                              fit: BoxFit.contain,
+                              repeat: true,
+                              animate: true,
+                            ),
                           ),
                         ),
-                      ),
 
-                      // Circular avatar on top (moved down slightly)
-                      Positioned(
-                        top: 86,
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundImage: AssetImage(
-                            'assets/images/arya-final.png',
+                        // Circular avatar on top
+                        Positioned(
+                          top: 86,
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundImage: AssetImage(
+                              'assets/images/arya-final.png',
+                            ),
+                            backgroundColor: Colors.transparent,
                           ),
-                          backgroundColor: Colors.transparent,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            margin: EdgeInsets.symmetric(horizontal: 40).copyWith(top: 18),
-            decoration: BoxDecoration(
-              border: Border.all(color: MyAppTheme.borderColor),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.zero,
-                topRight: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.zero,
-              ),
+              ],
             ),
-            child: Text(
-              "Hello, I am ARYA, your personal assistant. What can I do for you today?",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: MyAppTheme.mainFontColor,
-                fontSize: 16,
-                fontFamily: 'Cera Pro',
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            margin: EdgeInsets.only(left: 10, top: 18),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Here are some features you can try:",
-              style: TextStyle(
-                color: MyAppTheme.mainFontColor,
-                fontSize: 16,
-                fontFamily: 'Cera Pro',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+            SizedBox(height: 30),
 
-          //features list
-          Column(
-            children: [
-              MyFeatureBox(
-                color: MyAppTheme.firstSuggestionBoxColor,
-                headerText: 'ChatGPT Integration',
-                descriptionText:
-                    'Integrate ChatGPT into your applications seamlessly.',
-                icon: Icons.chat_bubble_outline,
+            // Welcome message
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              margin: EdgeInsets.symmetric(horizontal: 30),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    MyAppTheme.firstSuggestionBoxColor.withOpacity(0.3),
+                    MyAppTheme.secondSuggestionBoxColor.withOpacity(0.2),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                border: Border.all(color: MyAppTheme.borderColor, width: 1.5),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: MyAppTheme.mainFontColor.withOpacity(0.1),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
-              MyFeatureBox(
-                color: MyAppTheme.secondSuggestionBoxColor,
-                headerText: 'Smart Voice Assistant',
-                descriptionText:
-                    'Interact with ARYA using natural language voice commands.',
-                icon: Icons.mic_outlined,
+              child: Text(
+                "Hello! I am ARYA, your personal AI assistant. How can I help you today?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: MyAppTheme.mainFontColor,
+                  fontSize: 16,
+                  fontFamily: 'Cera Pro',
+                  height: 1.4,
+                ),
               ),
-            ],
-          ),
-        ],
+            ),
+
+            SizedBox(height: 30),
+
+            // Features header
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                children: [
+                  Container(
+                    width: 4,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: MyAppTheme.mainFontColor,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    "Features",
+                    style: TextStyle(
+                      color: MyAppTheme.mainFontColor,
+                      fontSize: 20,
+                      fontFamily: 'Cera Pro',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 20),
+
+            //features list
+            Column(
+              children: [
+                MyFeatureBox(
+                  color: MyAppTheme.firstSuggestionBoxColor,
+                  headerText: 'ChatGPT Integration',
+                  descriptionText:
+                      'Integrate ChatGPT into your applications seamlessly.',
+                  icon: Icons.chat_bubble_outline,
+                ),
+                MyFeatureBox(
+                  color: MyAppTheme.secondSuggestionBoxColor,
+                  headerText: 'Smart Voice Assistant',
+                  descriptionText:
+                      'Interact with ARYA using natural language voice commands.',
+                  icon: Icons.mic_outlined,
+                ),
+              ],
+            ),
+
+            SizedBox(height: 20),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          debugPrint("Floating Action Button Pressed");
-        },
-        backgroundColor: MyAppTheme.mainFontColor,
-        child: const Icon(Icons.keyboard_voice, color: MyAppTheme.whiteColor),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: MyAppTheme.mainFontColor.withOpacity(0.4),
+              blurRadius: 15,
+              spreadRadius: 3,
+            ),
+          ],
+        ),
+        child: FloatingActionButton(
+          onPressed: () {
+            debugPrint("Floating Action Button Pressed");
+          },
+          backgroundColor: MyAppTheme.mainFontColor,
+          elevation: 0,
+          child: const Icon(
+            Icons.keyboard_voice,
+            color: MyAppTheme.whiteColor,
+            size: 28,
+          ),
+        ),
       ),
     );
   }

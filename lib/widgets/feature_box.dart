@@ -16,40 +16,85 @@ class MyFeatureBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 35.0),
+      margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 30.0),
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(15.0),
+        gradient: LinearGradient(
+          colors: [
+            color ?? Colors.orange,
+            (color ?? Colors.orange).withOpacity(0.7),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
-            color: const Color.fromARGB(86, 158, 158, 158),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+            color: (color ?? Colors.orange).withOpacity(0.4),
+            spreadRadius: 0,
+            blurRadius: 15,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: Column(
-          children: [
-            if (icon != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Icon(icon, size: 28, color: Colors.white),
-              ),
-            Text(
-              headerText,
-              style: TextStyle(fontFamily: 'Cera Pro', fontSize: 18),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.white.withOpacity(0.3),
+              width: 1.5,
             ),
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Text(
-                descriptionText,
-                style: TextStyle(fontFamily: 'Cera Pro', fontSize: 14),
-              ),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 20.0,
             ),
-          ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    if (icon != null)
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.25),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(icon, size: 28, color: Colors.white),
+                      ),
+                    if (icon != null) SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        headerText,
+                        style: TextStyle(
+                          fontFamily: 'Cera Pro',
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.only(left: 0),
+                  child: Text(
+                    descriptionText,
+                    style: TextStyle(
+                      fontFamily: 'Cera Pro',
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.95),
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
