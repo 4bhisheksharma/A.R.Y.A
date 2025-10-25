@@ -21,7 +21,7 @@ class MyFeatureBox extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             color ?? Colors.orange,
-            (color ?? Colors.orange).withOpacity(0.7),
+            (color ?? Colors.orange).withValues(alpha: 0.7),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -29,7 +29,7 @@ class MyFeatureBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
-            color: (color ?? Colors.orange).withOpacity(0.4),
+            color: (color ?? Colors.orange).withValues(alpha: 0.4),
             spreadRadius: 0,
             blurRadius: 15,
             offset: const Offset(0, 6),
@@ -41,7 +41,7 @@ class MyFeatureBox extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.white.withOpacity(0.3),
+              color: Colors.white.withValues(alpha: 0.3),
               width: 1.5,
             ),
             borderRadius: BorderRadius.circular(20.0),
@@ -60,7 +60,7 @@ class MyFeatureBox extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.25),
+                          color: Colors.white.withValues(alpha: 0.25),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(icon, size: 28, color: Colors.white),
@@ -87,7 +87,7 @@ class MyFeatureBox extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Cera Pro',
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.95),
+                      color: Colors.white.withValues(alpha: 0.95),
                       height: 1.4,
                     ),
                   ),

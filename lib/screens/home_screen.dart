@@ -104,7 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: MyAppTheme.mainFontColor.withOpacity(0.3),
+                          color: MyAppTheme.mainFontColor.withValues(
+                            alpha: 0.3,
+                          ),
                           blurRadius: 30,
                           spreadRadius: 5,
                         ),
@@ -145,39 +147,88 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 30),
 
-            // Welcome message
+            // Welcome message or Speech Recognition Display
             Container(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               margin: EdgeInsets.symmetric(horizontal: 30),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    MyAppTheme.firstSuggestionBoxColor.withOpacity(0.3),
-                    MyAppTheme.secondSuggestionBoxColor.withOpacity(0.2),
-                  ],
+                  colors: speechToText.isListening
+                      ? [
+                          MyAppTheme.mainFontColor.withValues(alpha: 0.4),
+                          MyAppTheme.secondSuggestionBoxColor.withValues(
+                            alpha: 0.3,
+                          ),
+                        ]
+                      : [
+                          MyAppTheme.firstSuggestionBoxColor.withValues(
+                            alpha: 0.3,
+                          ),
+                          MyAppTheme.secondSuggestionBoxColor.withValues(
+                            alpha: 0.2,
+                          ),
+                        ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                border: Border.all(color: MyAppTheme.borderColor, width: 1.5),
+                border: Border.all(
+                  color: speechToText.isListening
+                      ? MyAppTheme.mainFontColor
+                      : MyAppTheme.borderColor,
+                  width: speechToText.isListening ? 2.0 : 1.5,
+                ),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: MyAppTheme.mainFontColor.withOpacity(0.1),
-                    blurRadius: 10,
-                    spreadRadius: 2,
+                    color: MyAppTheme.mainFontColor.withValues(
+                      alpha: speechToText.isListening ? 0.3 : 0.1,
+                    ),
+                    blurRadius: speechToText.isListening ? 20 : 10,
+                    spreadRadius: speechToText.isListening ? 4 : 2,
                     offset: Offset(0, 4),
                   ),
                 ],
               ),
-              child: Text(
-                "Hello! I am ARYA, your personal AI assistant. How can I help you today?",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: MyAppTheme.mainFontColor,
-                  fontSize: 16,
-                  fontFamily: 'Cera Pro',
-                  height: 1.4,
-                ),
+              child: Column(
+                children: [
+                  if (speechToText.isListening)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.mic,
+                          color: MyAppTheme.mainFontColor,
+                          size: 20,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "Listening...",
+                          style: TextStyle(
+                            color: MyAppTheme.mainFontColor,
+                            fontSize: 14,
+                            fontFamily: 'Cera Pro',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (speechToText.isListening) SizedBox(height: 8),
+                  Text(
+                    lastWords.isEmpty
+                        ? "Hello! I am ARYA, your personal AI assistant. How can I help you today?"
+                        : lastWords,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: MyAppTheme.mainFontColor,
+                      fontSize: 16,
+                      fontFamily: 'Cera Pro',
+                      height: 1.4,
+                      fontWeight: lastWords.isEmpty
+                          ? FontWeight.normal
+                          : FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -241,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: MyAppTheme.mainFontColor.withOpacity(0.4),
+              color: MyAppTheme.mainFontColor.withValues(alpha: 0.4),
               blurRadius: 15,
               spreadRadius: 3,
             ),
