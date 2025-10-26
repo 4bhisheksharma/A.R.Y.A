@@ -28,7 +28,7 @@
 
 ### Video Demonstration
 
-https://github.com/user-attachments/assets/
+[Watch the demo video here](https://github.com/4bhisheksharma/A.R.Y.A/blob/main/assets/screenshots/arya%20screen%20record.mp4)
 
 ---
 
