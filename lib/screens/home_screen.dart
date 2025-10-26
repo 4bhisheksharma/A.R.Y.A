@@ -1,3 +1,4 @@
+import 'package:arya/services/openai_service.dart';
 import 'package:arya/theme/app_theme.dart';
 import 'package:arya/widgets/feature_box.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final speechToText = SpeechToText();
+  final OpenaiService openaiService = OpenaiService();
   String lastWords = "";
+  String? generatedContent;
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +44,21 @@ class _HomeScreenState extends State<HomeScreen> {
   void onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       lastWords = result.recognizedWords;
+    });
+  }
+
+  Future<void> sendMessageToOpenRouter() async {
+    if (lastWords.isEmpty) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await openaiService.chatGPTAPI(lastWords);
+
+    setState(() {
+      generatedContent = response;
+      isLoading = false;
     });
   }
 
@@ -228,9 +248,108 @@ class _HomeScreenState extends State<HomeScreen> {
                           : FontWeight.w600,
                     ),
                   ),
+                  if (lastWords.isNotEmpty && !speechToText.isListening)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: ElevatedButton.icon(
+                        onPressed: isLoading ? null : sendMessageToOpenRouter,
+                        icon: isLoading
+                            ? SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Icon(Icons.send, size: 18),
+                        label: Text(
+                          isLoading ? 'Processing...' : 'Send to AI',
+                          style: TextStyle(
+                            fontFamily: 'Cera Pro',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MyAppTheme.mainFontColor,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
+
+            // AI Response Section
+            if (generatedContent != null)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                margin: EdgeInsets.symmetric(horizontal: 30).copyWith(top: 20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      MyAppTheme.thirdSuggestionBoxColor.withValues(alpha: 0.3),
+                      MyAppTheme.firstSuggestionBoxColor.withValues(alpha: 0.2),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  border: Border.all(
+                    color: MyAppTheme.mainFontColor.withValues(alpha: 0.5),
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: MyAppTheme.mainFontColor.withValues(alpha: 0.15),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.auto_awesome,
+                          color: MyAppTheme.mainFontColor,
+                          size: 20,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "AI Response:",
+                          style: TextStyle(
+                            color: MyAppTheme.mainFontColor,
+                            fontSize: 14,
+                            fontFamily: 'Cera Pro',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      generatedContent!,
+                      style: TextStyle(
+                        color: MyAppTheme.mainFontColor,
+                        fontSize: 15,
+                        fontFamily: 'Cera Pro',
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
             SizedBox(height: 30),
 

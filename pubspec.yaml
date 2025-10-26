@@ -15,6 +15,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   lottie: ^3.3.1
   speech_to_text: ^7.3.0
+  flutter_dotenv: ^6.0.0
+  http: ^1.5.0
 
 dev_dependencies:
   flutter_test:
@@ -29,6 +31,7 @@ flutter:
   assets:
     - assets/images/
     - assets/audios/
+    - .env
 
   fonts:
     - family: Cera Pro
