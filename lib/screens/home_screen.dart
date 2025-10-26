@@ -32,29 +32,49 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> startListening() async {
-    await speechToText.listen(onResult: onSpeechResult);
+    await speechToText.listen(
+      onResult: onSpeechResult,
+      listenFor: Duration(seconds: 30),
+      pauseFor: Duration(seconds: 3),
+    );
     setState(() {});
   }
 
   Future<void> stopListening() async {
     await speechToText.stop();
     setState(() {});
+
+    // Automatically send to AI after stopping
+    if (lastWords.isNotEmpty) {
+      await sendMessageToOpenRouter();
+    }
   }
 
   void onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       lastWords = result.recognizedWords;
     });
+
+    if (result.finalResult && lastWords.isNotEmpty) {
+      debugPrint("Final result detected: $lastWords");
+      Future.delayed(Duration(milliseconds: 500), () {
+        sendMessageToOpenRouter();
+      });
+    }
   }
 
   Future<void> sendMessageToOpenRouter() async {
     if (lastWords.isEmpty) return;
+
+    debugPrint("Sending to AI: $lastWords");
 
     setState(() {
       isLoading = true;
     });
 
     final response = await openaiService.chatGPTAPI(lastWords);
+
+    debugPrint("AI Response received: $response");
 
     setState(() {
       generatedContent = response;
@@ -248,39 +268,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           : FontWeight.w600,
                     ),
                   ),
-                  if (lastWords.isNotEmpty && !speechToText.isListening)
+                  if (isLoading && !speechToText.isListening)
                     Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: ElevatedButton.icon(
-                        onPressed: isLoading ? null : sendMessageToOpenRouter,
-                        icon: isLoading
-                            ? SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Icon(Icons.send, size: 18),
-                        label: Text(
-                          isLoading ? 'Processing...' : 'Send to AI',
-                          style: TextStyle(
-                            fontFamily: 'Cera Pro',
-                            fontWeight: FontWeight.w600,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: MyAppTheme.mainFontColor,
+                            ),
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: MyAppTheme.mainFontColor,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
+                          SizedBox(width: 12),
+                          Text(
+                            'Processing...',
+                            style: TextStyle(
+                              fontFamily: 'Cera Pro',
+                              fontWeight: FontWeight.w600,
+                              color: MyAppTheme.mainFontColor,
+                              fontSize: 14,
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                        ],
                       ),
                     ),
                 ],
