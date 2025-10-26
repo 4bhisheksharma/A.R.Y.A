@@ -2,6 +2,7 @@ import 'package:arya/services/openai_service.dart';
 import 'package:arya/theme/app_theme.dart';
 import 'package:arya/widgets/feature_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final speechToText = SpeechToText();
+  final FlutterTts flutterTts = FlutterTts();
   final OpenaiService openaiService = OpenaiService();
   String lastWords = "";
   String? generatedContent;
@@ -24,11 +26,23 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     initSpeechToText();
+    initTextToSpeech();
   }
 
   Future<void> initSpeechToText() async {
     await speechToText.initialize();
     setState(() {});
+  }
+
+  Future<void> initTextToSpeech() async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.setVolume(1.0);
+  }
+
+  Future<void> systemSpeak(String content) async {
+    await flutterTts.speak(content);
   }
 
   Future<void> startListening() async {
@@ -80,12 +94,18 @@ class _HomeScreenState extends State<HomeScreen> {
       generatedContent = response;
       isLoading = false;
     });
+
+    // Speak the AI response
+    if (response != null && response.isNotEmpty) {
+      await systemSpeak(response);
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
     speechToText.stop();
+    flutterTts.stop();
   }
 
   @override
@@ -338,14 +358,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           size: 20,
                         ),
                         SizedBox(width: 8),
-                        Text(
-                          "AI Response:",
-                          style: TextStyle(
-                            color: MyAppTheme.mainFontColor,
-                            fontSize: 14,
-                            fontFamily: 'Cera Pro',
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            "ARYA Response:",
+                            style: TextStyle(
+                              color: MyAppTheme.mainFontColor,
+                              fontSize: 14,
+                              fontFamily: 'Cera Pro',
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.volume_up,
+                            color: MyAppTheme.mainFontColor,
+                            size: 24,
+                          ),
+                          onPressed: () {
+                            systemSpeak(generatedContent!);
+                          },
+                          tooltip: 'Replay response',
                         ),
                       ],
                     ),
@@ -401,7 +434,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: MyAppTheme.firstSuggestionBoxColor,
                   headerText: 'ChatGPT Integration',
                   descriptionText:
-                      'Integrate ChatGPT into your applications seamlessly.',
+                      'Integrated ChatGPT into ARYA for intelligent conversations.',
                   icon: Icons.chat_bubble_outline,
                 ),
                 MyFeatureBox(
